@@ -1,0 +1,1 @@
+A Simple Timer written in Vanilla JS.
