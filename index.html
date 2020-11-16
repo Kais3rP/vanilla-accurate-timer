@@ -16,6 +16,20 @@
         <div id="settings">
             <h2>SETTINGS</h2>
             <div id="closeSettings">&times;</div>
+            <div class="break_info">
+                <h4>Sitting Break:</h4>
+                <h4 id="sitBreakInfo">
+                    0
+                </h4>
+                <h5>Minutes</h5>
+            </div>
+            <div class="break_info">
+                <h4>Standing Break:</h4>
+                <h4 id="stdBreakInfo">
+                    0
+                </h4>
+                <h5>Minutes</h5>
+            </div>
             <div class="input_container">
                 <input id="sitBreakInput" value="" placeholder="Sitting time break (min)" />
                 <button id="sitBreakBtn" class="settings_btn">SET</button>
@@ -47,16 +61,8 @@
                             <h3> Reset Timer </h3>
                         </div>
                     </div>
-
                 </div>
                 <h3>SITTING</h3>
-                <div class="break_info">
-                    <h4>Break:</h4>
-                    <h4 id="sitBreakInfo">
-                        0
-                    </h4>
-                    <h5>Minutes</h5>
-                </div>
                 <div id="sittingDiv" class="timer">00:00:00</div>
             </div>
             <div style="width:1px; height:50%; background:grey; align-self:flex-end"></div>
@@ -82,14 +88,6 @@
                     </div>
                 </div>
                 <h3>STANDING</h3>
-                <div class="break_info">
-                    <h4>Break:</h4>
-                    <h4 id="stdBreakInfo">
-                        0
-                    </h4>
-                    <h5>Minutes</h5>
-                </div>
-
                 <div id="standingDiv" class="timer">00:00:00</div>
             </div>
         </div>
