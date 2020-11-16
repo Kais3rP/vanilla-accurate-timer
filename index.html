@@ -54,6 +54,9 @@
          
         </div>
         <h3>SITTING</h3>
+        <div class="break_info"><h4>Break:</h4> <h4 id="sitBreakInfo">  
+          0        
+       </h4><h5>Minutes</h5> </div>
          <div id="sittingDiv" class="timer">00:00:00</div>
       </div>
         <div style="width:1px; height:50%; background:grey; align-self:flex-end"></div>
@@ -76,14 +79,19 @@
           <div id="pause_tooltip_std" class="tooltip">
             <h3> Reset Timer </h3>
           </div>
-          </div>
-         
+          </div>         
         </div>
            <h3>STANDING</h3>
+           <div class="break_info"><h4>Break:</h4> <h4 id="stdBreakInfo">  
+            0        
+         </h4><h5>Minutes</h5> </div>
+          
          <div id="standingDiv" class="timer">00:00:00</div>      
       </div>
         </div>
          <div id="canvas-container">
+           <button id="startChart" class="chart_btn">RECORD CHART</button>
+           <button id="stopChart" class="chart_btn">STOP RECORDING CHART</button>
          <canvas id="myChart" width="1" height="0"></canvas>
         </div>
       </div>

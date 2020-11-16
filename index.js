@@ -2,6 +2,8 @@
 let timers = {};
 let sitBreak = 0;
 let stdBreak = 0;
+let chartTimeElapsed = 0;
+let chartUpdateInterval;
 
 //---------------------
 class Timers {
@@ -46,6 +48,7 @@ class Timers {
       this.minutesElapsed = 0;
       this.hoursElapsed = 0;
       this.breakTime = 0;
+      this.isBreakDonw = false;
       this.writeTime = this.writeTime.bind(this);
       this.increment = this.increment.bind(this);
     }
@@ -59,7 +62,7 @@ class Timers {
       this.isPaused = false;
       this.isStopped = false;
       this.increment();
-      this.isAnyTimerStarted = true;
+      setTimeout(()=>{ this.isBreakDone = false; },2000)
     }
   
     pause() {
@@ -84,9 +87,14 @@ class Timers {
     }
   
     increment() {
-      if (this.secondsElapsed !== 0 && this.hoursElapsed * 3600 + this.minutesElapsed * 60 + this.secondsElapsed % this.breakTime === 0)
+      if (
+        !this.isBreakDone && 
+        this.secondsElapsed !== 0 && 
+        this.hoursElapsed * 3600 + this.minutesElapsed * 60 + this.secondsElapsed % this.breakTime === 0
+        )
         {
           this.pause();
+          this.isBreakDone = true;
           return alert("You need to take a break")
         }
       let tempTime = Math.floor(Date.now() / 1000);
@@ -152,13 +160,17 @@ initTimers(sittingDiv, standingDiv);
   };
   //------------------------------------
   sitBreakBtn.onclick = () => {
-     sitBreak = sitBreakInput.value; 
+     sitBreak = +sitBreakInput.value * 60; 
      timers.sittingTimer.breakTime = sitBreak;
+     sitBreakInfo.innerText = sitBreakInput.value;
+     sitBreakInput.value="";
   }
 
   stdBreakBtn.onclick = () => {
-    stdBreak = stdBreakInput.value;  
+    stdBreak = +stdBreakInput.value * 60;  
     timers.standingTimer.breakTime = stdBreak;
+    stdBreakInfo.innerText = stdBreakInput.value;
+    stdBreakInput.value="";
  }
   //------------------------------------
   settingsBtn.onclick = () => {
@@ -177,30 +189,80 @@ shadow.style.display = "none";
   const myChart = new Chart(ctx, {
     type: "line",
     data: {
-      labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+      labels: [],
       datasets: [
         {
-          label: "Standing Minutes",
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: "rgba(255, 99, 132, 0.2)"
+          label: "Sitting Minutes",
+          data: [
+            {
+              x: chartTimeElapsed,
+              y:0
+            }
+          ],
+          borderColor:"rgb(20,20,20)",
+          fill:false
         },
         {
-          label: "Sitting Minutes",
-          data: [23, 56, 4, 1, 3, 10],
-          backgroundColor: "rgba(10, 99, 132, 0.2)"
+          label: "Standing Minutes",
+          data: [  {
+            x: chartTimeElapsed,
+            y:0
+          }],
+          borderColor:"rgb(200,200,200)",
+          fill:false,
+          yAxisID: 'y-axis-1',
         }
       ]
     },
     options: {
       scales: {
-        yAxes: [
-          {
-            ticks: {
-              beginAtZero: true
-            }
-          }
-        ]
-      }
+        yAxes: [{
+          type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+          display: true,
+          position: 'left',
+          id: 'y-axis-1',
+      }]
+    }
     }
   });
   
+  function updateSittingData(chart){
+chart.data.datasets[0].data.push(
+  {
+    x: chartTimeElapsed,
+    y: timers.sittingTimer.hoursElapsed * 3600 + timers.sittingTimer.minutesElapsed * 60 + timers.sittingTimer.secondsElapsed
+  }
+  );
+chart.update();
+  }
+
+  function updateStandingData(chart){
+    chart.data.datasets[1].data.push(
+      {
+        x: chartTimeElapsed,
+        y: timers.standingTimer.hoursElapsed * 3600 + timers.standingTimer.minutesElapsed * 60 + timers.standingTimer.secondsElapsed
+      })
+    chart.update();
+      }
+
+    function updateLabels(chart){
+        chart.data.labels.push(`${new Date().getHours()}:00`); 
+      } 
+
+
+startChart.onclick = () => {
+   
+  chartUpdateInterval = setInterval( () => {
+    console.log("Recording Chart")
+    console.log(myChart.data.datasets[0].data)
+    console.log(myChart.data.datasets[1].data)
+    updateLabels(myChart);
+    updateSittingData(myChart);
+    updateStandingData(myChart);
+    chartTimeElapsed += 5;
+    },5000)
+}
+
+stopChart.onclick = () => {
+  clearInterval( chartUpdateInterval );
+}    

@@ -127,6 +127,7 @@ outline:none;
   display:flex;
   justify-content:center;
   align-items:flex-end;
+  position:relative;
 }
 
 #settingsBtn{
@@ -157,6 +158,7 @@ outline:none;
   display:flex;
   justify-content:center;
   align-items:center;
+  margin-bottom:10px;
 }
 
 .settings_btn{
@@ -189,7 +191,30 @@ cursor:pointer;
  z-index:1;
 display:none;
 }
+.break_info{
+  width:35%;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
 
+.chart_btn{
+  position:absolute;
+  top:40px;
+  background-color:#555;
+  color:white;
+  padding:20px;
+}
+.chart_btn:hover{
+  background-color:lightslategrey;
+}
+
+#startChart{
+  right:20px;
+}
+#stopChart{
+  right:170px;
+}
 @media screen and (max-width:768px){
   .btn-container:hover > .tooltip{
     display:none;
