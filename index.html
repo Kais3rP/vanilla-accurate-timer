@@ -11,90 +11,94 @@
 </head>
 
 <body>
-    <link href="http://fonts.cdnfonts.com/css/solothurn" rel="stylesheet">
-    <link href="http://fonts.cdnfonts.com/css/ds-digital" rel="stylesheet">
     <div id="wrapper">
         <div id="shadow"></div>
         <div id="settings">
             <h2>SETTINGS</h2>
-          <div id="closeSettings">&times;</div>
-          <div class="input_container">
-            <input id="sitBreakInput" value="" placeholder="Sitting time break (min)"/>
-            <button id="sitBreakBtn" class="settings_btn">SET</button>
-          </div>
-          <div class="input_container">
-            <input id="stdBreakInput" value="" placeholder="Standing time break (min)"/>
-            <button id="stdBreakBtn" class="settings_btn">SET</button>
-          </div>
-         
-         
+            <div id="closeSettings">&times;</div>
+            <div class="input_container">
+                <input id="sitBreakInput" value="" placeholder="Sitting time break (min)" />
+                <button id="sitBreakBtn" class="settings_btn">SET</button>
+            </div>
+            <div class="input_container">
+                <input id="stdBreakInput" value="" placeholder="Standing time break (min)" />
+                <button id="stdBreakBtn" class="settings_btn">SET</button>
+            </div>
         </div>
         <button id="settingsBtn">SETTINGS</button>
         <div id="timers-container">
-      <div class="container">
-        <div class="btn-wrapper">
-        <div class="btn-container">
-          <button class="control_btn" id="_start_sit">START</button>
-          <div id="start_tooltip_sit" class="tooltip">
-            <h3> Start Timer </h3>
-          </div>
+            <div class="container">
+                <div class="btn-wrapper">
+                    <div class="btn-container">
+                        <button class="control_btn" id="_start_sit">START</button>
+                        <div id="start_tooltip_sit" class="tooltip">
+                            <h3> Start Timer </h3>
+                        </div>
+                    </div>
+                    <div class="btn-container">
+                        <button class="control_btn" id="_stop_sit">STOP</button>
+                        <div id="stop_tooltip_sit" class="tooltip">
+                            <h3> Stop Timer </h3>
+                        </div>
+                    </div>
+                    <div class="btn-container">
+                        <button class="control_btn" id="_pause_sit">PAUSE</button>
+                        <div id="pause_tooltip_sit" class="tooltip">
+                            <h3> Reset Timer </h3>
+                        </div>
+                    </div>
+
+                </div>
+                <h3>SITTING</h3>
+                <div class="break_info">
+                    <h4>Break:</h4>
+                    <h4 id="sitBreakInfo">
+                        0
+                    </h4>
+                    <h5>Minutes</h5>
+                </div>
+                <div id="sittingDiv" class="timer">00:00:00</div>
+            </div>
+            <div style="width:1px; height:50%; background:grey; align-self:flex-end"></div>
+            <div class="container">
+                <div class="btn-wrapper">
+                    <div class="btn-container">
+                        <button class="control_btn" id="_start_std">START</button>
+                        <div id="start_tooltip_std" class="tooltip">
+                            <h3> Start Timer </h3>
+                        </div>
+                    </div>
+                    <div class="btn-container">
+                        <button class="control_btn" id="_stop_std">STOP</button>
+                        <div id="stop_tooltip_std" class="tooltip">
+                            <h3> Stop Timer </h3>
+                        </div>
+                    </div>
+                    <div class="btn-container">
+                        <button class="control_btn" id="_pause_std">PAUSE</button>
+                        <div id="pause_tooltip_std" class="tooltip">
+                            <h3> Reset Timer </h3>
+                        </div>
+                    </div>
+                </div>
+                <h3>STANDING</h3>
+                <div class="break_info">
+                    <h4>Break:</h4>
+                    <h4 id="stdBreakInfo">
+                        0
+                    </h4>
+                    <h5>Minutes</h5>
+                </div>
+
+                <div id="standingDiv" class="timer">00:00:00</div>
+            </div>
         </div>
-        <div class="btn-container">
-          <button class="control_btn" id="_stop_sit">STOP</button>
-          <div id="stop_tooltip_sit" class="tooltip">
-            <h3> Stop Timer </h3>
-          </div>
+        <div id="canvas-container">
+            <button id="startChart" class="chart_btn">RECORD CHART</button>
+            <button id="stopChart" class="chart_btn">STOP RECORDING CHART</button>
+            <canvas id="myChart" width="1" height="0"></canvas>
         </div>
-        <div class="btn-container">
-          <button class="control_btn" id="_pause_sit">PAUSE</button>
-          <div id="pause_tooltip_sit" class="tooltip">
-            <h3> Reset Timer </h3>
-          </div>
-          </div>
-         
-        </div>
-        <h3>SITTING</h3>
-        <div class="break_info"><h4>Break:</h4> <h4 id="sitBreakInfo">  
-          0        
-       </h4><h5>Minutes</h5> </div>
-         <div id="sittingDiv" class="timer">00:00:00</div>
-      </div>
-        <div style="width:1px; height:50%; background:grey; align-self:flex-end"></div>
-        <div class="container">
-        <div class="btn-wrapper">
-        <div class="btn-container">
-          <button class="control_btn" id="_start_std">START</button>
-          <div id="start_tooltip_std" class="tooltip">
-            <h3> Start Timer </h3>
-          </div>
-        </div>
-        <div class="btn-container">
-          <button class="control_btn" id="_stop_std">STOP</button>
-          <div id="stop_tooltip_std" class="tooltip">
-            <h3> Stop Timer </h3>
-          </div>
-        </div>
-        <div class="btn-container">
-          <button class="control_btn" id="_pause_std">PAUSE</button>
-          <div id="pause_tooltip_std" class="tooltip">
-            <h3> Reset Timer </h3>
-          </div>
-          </div>         
-        </div>
-           <h3>STANDING</h3>
-           <div class="break_info"><h4>Break:</h4> <h4 id="stdBreakInfo">  
-            0        
-         </h4><h5>Minutes</h5> </div>
-          
-         <div id="standingDiv" class="timer">00:00:00</div>      
-      </div>
-        </div>
-         <div id="canvas-container">
-           <button id="startChart" class="chart_btn">RECORD CHART</button>
-           <button id="stopChart" class="chart_btn">STOP RECORDING CHART</button>
-         <canvas id="myChart" width="1" height="0"></canvas>
-        </div>
-      </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <script src="index.js"></script>
 </body>
