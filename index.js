@@ -1,6 +1,41 @@
-class Timer {
-    constructor() {
-      this.timerDiv = document.getElementById("timer");
+//Global
+let timers = {};
+let sitBreak = 0;
+let stdBreak = 0;
+
+//---------------------
+class Timers {
+    constructor(div1, div2) {
+      this.isAnyTimerStarted = false;
+      this.sittingTimer = new Timer(div1);
+      this.standingTimer = new Timer(div2);
+      this.sittingDiv = div1;
+      this.standingDiv = div2;
+    }
+  
+    start(type) {
+      if (type === "sit") {
+        if (this.standingTimer.isStarted) return;
+        this.sittingTimer.start();
+      }
+  
+      if (type === "std") {
+        if (this.sittingTimer.isStarted) return;
+        this.standingTimer.start();
+      }
+    }
+    pause(type) {
+      if (type === "sit") this.sittingTimer.pause();
+      if (type === "std") this.standingTimer.pause();
+    }
+    stop(type) {
+      if (type === "sit") this.sittingTimer.stop();
+      if (type === "std") this.standingTimer.stop();
+    }
+  }
+  class Timer {
+    constructor(timerDiv) {
+      this.timerDiv = timerDiv;
       this.time = 0;
       this.startTime = 0;
       this.isStarted = false;
@@ -10,11 +45,13 @@ class Timer {
       this.secondsElapsed = 0;
       this.minutesElapsed = 0;
       this.hoursElapsed = 0;
+      this.breakTime = 0;
       this.writeTime = this.writeTime.bind(this);
       this.increment = this.increment.bind(this);
     }
   
     start() {
+        console.log(this.breakTime)
       if (this.isStarted) return;
       this.startTime = Math.round(Date.now() / 1000);
       this.time = this.startTime;
@@ -22,14 +59,15 @@ class Timer {
       this.isPaused = false;
       this.isStopped = false;
       this.increment();
+      this.isAnyTimerStarted = true;
     }
   
     pause() {
       this.isStarted = false;
       this.isPaused = true;
-      this.isStopped = false;
       console.log("paused");
       clearTimeout(this.timer);
+   
     }
   
     stop() {
@@ -46,6 +84,11 @@ class Timer {
     }
   
     increment() {
+      if (this.secondsElapsed !== 0 && this.hoursElapsed * 3600 + this.minutesElapsed * 60 + this.secondsElapsed % this.breakTime === 0)
+        {
+          this.pause();
+          return alert("You need to take a break")
+        }
       let tempTime = Math.floor(Date.now() / 1000);
       if (tempTime > this.time) {
         this.time = tempTime;
@@ -59,7 +102,11 @@ class Timer {
           }
         }
   
-        this.writeTime(this.secondsElapsed, this.minutesElapsed, this.hoursElapsed);
+        this.writeTime(
+          this.secondsElapsed,
+          this.minutesElapsed,
+          this.hoursElapsed
+        );
       }
       this.timer = setTimeout(this.increment, 20);
     }
@@ -76,64 +123,84 @@ class Timer {
     }
   }
   
-  const timer = new Timer();
+function initTimers(divSit, divStd){
+    timers = new Timers(divSit, divStd);
+}
+
+//Default init:
+initTimers(sittingDiv, standingDiv);
+
   
-  _start.onclick = timer.start.bind(timer);
-  _stop.onclick = timer.stop.bind(timer);
-  _pause.onclick = timer.pause.bind(timer);
-  
-  _start.onmouseover = () => {
-    start_tooltip.style.display = "flex";
+  _start_sit.onclick = () => {
+    timers.start("sit");
+  };
+  _stop_sit.onclick = () => {
+    timers.stop("sit");
+  };
+  _pause_sit.onclick = () => {
+    timers.pause("sit");
   };
   
-  _start.onmouseout = () => {
-    start_tooltip.style.display = "none";
+  _start_std.onclick = () => {
+    timers.start("std");
   };
-  
-  _stop.onmouseover = () => {
-    stop_tooltip.style.display = "flex";
+  _stop_std.onclick = () => {
+    timers.stop("std");
   };
-  
-  _stop.onmouseout = () => {
-    stop_tooltip.style.display = "none";
+  _pause_std.onclick = () => {
+    timers.pause("std");
   };
-  
-  _pause.onmouseover = () => {
-    pause_tooltip.style.display = "flex";
-  };
-  
-  _pause.onmouseout = () => {
-    pause_tooltip.style.display = "none";
-  };
-  
+  //------------------------------------
+  sitBreakBtn.onclick = () => {
+     sitBreak = sitBreakInput.value; 
+     timers.sittingTimer.breakTime = sitBreak;
+  }
+
+  stdBreakBtn.onclick = () => {
+    stdBreak = stdBreakInput.value;  
+    timers.standingTimer.breakTime = stdBreak;
+ }
+  //------------------------------------
+  settingsBtn.onclick = () => {
+settings.style.display= "flex";
+shadow.style.display = "block";
+  }
+
+  closeSettings.onclick = () => {
+settings.style.display = "none";
+shadow.style.display = "none";
+  }
   
   //Chart
   
   const ctx = document.getElementById("myChart");
   const myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          datasets: [{
-              label: '# of secs',
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: 'rgba(255, 99, 132, 0.2)',
-             
-          },
-                    {
-              label: '# of mins',
-              data: [23, 56, 4, 1, 3, 10],
-              backgroundColor: 'rgba(10, 99, 132, 0.2)',
-             
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
-              }]
+    type: "line",
+    data: {
+      labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+      datasets: [
+        {
+          label: "Standing Minutes",
+          data: [12, 19, 3, 5, 2, 3],
+          backgroundColor: "rgba(255, 99, 132, 0.2)"
+        },
+        {
+          label: "Sitting Minutes",
+          data: [23, 56, 4, 1, 3, 10],
+          backgroundColor: "rgba(10, 99, 132, 0.2)"
+        }
+      ]
+    },
+    options: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true
+            }
           }
+        ]
       }
+    }
   });
+  
