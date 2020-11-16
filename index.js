@@ -109,3 +109,35 @@ _pause.onmouseover = () => {
 _pause.onmouseout = () => {
     pause_tooltip.style.display = "none";
 };
+
+
+//Chart
+
+const ctx = document.getElementById("myChart");
+const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of secs',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+
+        },
+        {
+            label: '# of mins',
+            data: [23, 56, 4, 1, 3, 10],
+            backgroundColor: 'rgba(10, 99, 132, 0.2)',
+
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
