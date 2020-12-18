@@ -1,16 +1,16 @@
 //Global
 let timers = {};
-let sitBreak = 0;
-let stdBreak = 0;
+//let sitBreak = 0;
+//let stdBreak = 0;
 let chartTimeElapsed = 0;
 let chartUpdateInterval;
 
 //---------------------
 class Timers {
-  constructor(div1, div2) {
+  constructor(timer1, timer2, div1, div2) {
     this.isAnyTimerStarted = false;
-    this.sittingTimer = new Timer(div1);
-    this.standingTimer = new Timer(div2);
+    this.sittingTimer = timer1;
+    this.standingTimer = timer2;
     this.sittingDiv = div1;
     this.standingDiv = div2;
   }
@@ -49,13 +49,12 @@ class Timer {
     this.minutesElapsed = 0;
     this.hoursElapsed = 0;
     this.breakTime = 0;
-    this.isBreakDonw = false;
+    this.isBreakDone = false;
     this.writeTime = this.writeTime.bind(this);
     this.increment = this.increment.bind(this);
   }
 
   start() {
-    console.log(this.breakTime)
     if (this.isStarted) return;
     this.startTime = Math.round(Date.now() / 1000);
     this.time = this.startTime;
@@ -82,7 +81,6 @@ class Timer {
     this.secondsElapsed = 0;
     this.minutesElapsed = 0;
     this.time = 0;
-    console.log("cleared");
     clearTimeout(this.timer);
     this.writeTime(this.secondsElapsed, this.minutesElapsed, this.hoursElapsed);
   }
@@ -91,7 +89,7 @@ class Timer {
     if (
       !this.isBreakDone &&
       this.secondsElapsed !== 0 &&
-      this.hoursElapsed * 3600 + this.minutesElapsed * 60 + this.secondsElapsed % this.breakTime === 0
+      (this.hoursElapsed * 3600 + this.minutesElapsed * 60 + this.secondsElapsed) % this.breakTime === 0
     ) {
       this.pause();
       this.isBreakDone = true;
@@ -132,7 +130,9 @@ class Timer {
 
 //------------------------------------------------------
 function initTimers(divSit, divStd) {
-  timers = new Timers(divSit, divStd);
+  const timer1 = new Timer(divSit)
+  const timer2 = new Timer(divStd)
+  timers = new Timers(timer1, timer2, divSit, divStd);
 }
 
 //Default init:
@@ -256,8 +256,6 @@ startChart.onclick = () => {
 
   chartUpdateInterval = setInterval(() => {
     console.log("Recording Chart")
-    console.log(myChart.data.datasets[0].data)
-    console.log(myChart.data.datasets[1].data)
     updateLabels(myChart);
     updateSittingData(myChart);
     updateStandingData(myChart);
